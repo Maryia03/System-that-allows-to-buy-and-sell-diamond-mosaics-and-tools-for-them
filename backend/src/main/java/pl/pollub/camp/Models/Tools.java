@@ -3,17 +3,16 @@ package pl.pollub.camp.Models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
 @Entity
 @Getter@Setter
-public class VehicleType {
+public class Tools{
     @Id
     @GeneratedValue
-    private int id;
-    private String description;
+    private int Id;
     private String name;
-    private Integer vehicleId;
-
+    private String Description;
+    private String imageLink;
+    private Double price;
 }

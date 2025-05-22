@@ -26,40 +26,26 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/auth/**",
-            "/reservation/find",
-            "/vehicle/all",
-            "/vehicle/id/**",
-            "/reservation/vehicle/**",
-            "/prices/find",
-            "/location/all"
+            "/mosaic/all",
+            "/mosaic/id/**",
+            "/tools/all",
+            "/tools/id/**",
     };// lista dozwolonych enpointów dla niezalogowanych
 
     private static final String[] CLIENT_ENDPONTS = {
-            "/reservation",
-            "/reservation/**",
-            "/reservation/resign/**",
-            "/location/all"
+            "/order",
+            "/order/**",
     };
 
-    private static final String[] EMPLOYEE_ENDPOINTS = {
-            "/vehicle/add",
-            "/vehicle/update/**",
-            "/vehicle-type/**",
+    private static final String[] ADMIN_ENDPOINTS = {
+            "/mosaic/add",
+            "/mosaic/update/**",
+            "/mosaic/delete/**",
+            "/tools/add",
+            "/tools/update/**",
+            "/tools/delete/**",
             "/user/all",
-            "/reservation/all",
-            "/reservation/cancel/**",
-            "/reservation/accept/**",
-            "/prices/add",
-            "/prices/update",
-            "/prices/all",
-            "/princes/delete",
-            "/order/**",
-            "/inspection/**",
-            "/location/all",
-            "/reports",
-            "/reports/**",
-            "/repairs",
-            "/repairs/**"
+            "/order/all",
     };//  lista endpointów dla admina
 
 
@@ -70,8 +56,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers(CLIENT_ENDPONTS).hasAnyRole(Role.CUSTOMER.toString(), Role.EMPLOYEE.toString(),Role.ADMIN.toString())
-                        .requestMatchers(EMPLOYEE_ENDPOINTS).hasAnyRole(Role.EMPLOYEE.toString(), Role.ADMIN.toString())
+                        .requestMatchers(CLIENT_ENDPONTS).hasAnyRole(Role.CUSTOMER.toString(),Role.ADMIN.toString())
+                        .requestMatchers(ADMIN_ENDPOINTS).hasAnyRole(Role.ADMIN.toString())
                         .requestMatchers("/**").hasAnyRole(Role.ADMIN.toString())
                 )
                 .sessionManagement(sess -> sess

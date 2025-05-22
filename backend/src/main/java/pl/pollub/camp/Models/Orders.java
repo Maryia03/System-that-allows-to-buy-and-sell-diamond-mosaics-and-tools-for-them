@@ -26,8 +26,8 @@ public class Orders {
     @ManyToOne
     private Users user;
     @Setter
-    private LocalDateTime startTime;
-    @Setter
     @ManyToOne
-    private Vehicles vehicle;
+    private Mosaics mosaic;
+    @ManyToMany
+    private List<Tools> tools;
 }

@@ -7,12 +7,10 @@ import pl.pollub.camp.Models.*;
 
 import java.util.List;
 @Getter@Setter
-public class VehicleRequest {
+public class MosaicRequest {
         private String name;
         private String Description;
-        private VehicleStatus vehicleStatus;
-        private String Comment;
         private String imageLink;
-        private int vehicleTypeId;
-
+        private String size;
+        private Double price;
 }
