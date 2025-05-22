@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
+import jakarta.persistence.ManyToMany;
 
 import java.security.Timestamp;
 import java.time.LocalDateTime;
