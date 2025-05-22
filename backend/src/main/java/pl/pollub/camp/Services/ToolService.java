@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pollub.camp.Models.Tools;
 import pl.pollub.camp.Repositories.ToolRepository;
+import pl.pollub.camp.Models.DTO.ToolRequest;
 
 import java.util.Optional;
 @Service

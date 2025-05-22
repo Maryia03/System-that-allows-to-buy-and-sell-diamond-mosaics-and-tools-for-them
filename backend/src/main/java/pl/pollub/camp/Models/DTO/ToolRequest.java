@@ -1,10 +1,10 @@
-package pl.pollub.camp.DTO;
-import lombok.Data;
+package pl.pollub.camp.Models.DTO;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@Data@Getter@Setter
-public class ToolsRequest {
+@Getter@Setter
+public class ToolRequest {
     private int id;
     private String name;
     private String description;
