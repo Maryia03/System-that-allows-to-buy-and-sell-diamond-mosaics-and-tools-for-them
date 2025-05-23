@@ -58,16 +58,28 @@ public class OrderController {
             return "You must choose at least one product: a mosaic or tools.";
         }
 
+        double totalCost = 0.0;
+        if (mosaic != null && mosaic.getPrice() != null) {
+            totalCost += mosaic.getPrice();
+        }
+        for (Tools tool : tools) {
+            if (tool.getPrice() != null) {
+                totalCost += tool.getPrice();
+            }
+        }
+
         Orders o = new Orders();
         o.setComment(comment);
         o.setUser(u);
         o.setMosaic(mosaic);
         o.setTools(tools);
         o.setOrderStatus(OrderStatus.PAID);
+        o.setTotalCost(totalCost);
 
         orderRepository.save(o);
-        return "Order successfully created";
+        return "Order successfully created. Total cost: " + totalCost;
     }
+
     @GetMapping(path = "/allOrders")
     public @ResponseBody Iterable<Orders> getAllOrders(){
         return orderRepository.findAll();
