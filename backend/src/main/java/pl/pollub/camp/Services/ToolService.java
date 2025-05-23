@@ -42,7 +42,6 @@ public class ToolService {
         tool.setName(updatedToolRequest.getName());
         tool.setDescription(updatedToolRequest.getDescription());
         tool.setImageLink(updatedToolRequest.getImageLink());
-        tool.setSize(updatedToolRequest.getSize());
         tool.setPrice(updatedToolRequest.getPrice());
 
         return toolRepository.save(tool);

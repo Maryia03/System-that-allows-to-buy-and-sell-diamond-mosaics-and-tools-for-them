@@ -54,7 +54,7 @@ public class AuthService {
         }
         Users u = userRepository.findByEmail(loginRequest.getEmail()).orElse(null);
         System.out.println(u.getEmail());
-        if(u.getRole() == Role.ADMIN || u.getRole() == Role.EMPLOYEE )
+        if(u.getRole() == Role.ADMIN)
             return "{ \"token\": \""+jwtService.generateToken(u)+"\", \"id\": \""+u.getId()+"\", \"admin\" : true}";
         else
             return "{ \"token\": \""+jwtService.generateToken(u)+"\", \"id\": \""+u.getId()+"\"}";

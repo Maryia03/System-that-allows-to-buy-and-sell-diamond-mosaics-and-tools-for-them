@@ -1,9 +1,8 @@
 package pl.pollub.camp.Models;
 
 public enum OrderStatus{
-    AVAILABLE,
     PAID,
     PENDING,
-    FINISHED,
+    DELIVERED,
     RESIGN_REQUEST
 }

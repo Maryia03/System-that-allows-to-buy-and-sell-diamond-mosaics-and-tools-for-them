@@ -48,7 +48,7 @@ public class ToolController {
     @PatchMapping(path = "/update/{id}")
     public @ResponseBody String updateTool(@PathVariable int id, @RequestBody ToolRequest updatedToolRequest) {
         try {
-            Vehicles updatedTool = toolService.updateTool(id, updatedToolRequest);
+            Tools updatedTool = toolService.updateTool(id, updatedToolRequest);
             return "Tool updated: " + updatedTool.getName();
         } catch (EntityNotFoundException e) {
             return e.getMessage();

@@ -48,7 +48,7 @@ public class MosaicController {
     @PatchMapping(path = "/update/{id}")
     public @ResponseBody String updateMosaic(@PathVariable int id, @RequestBody MosaicRequest updatedMosaicRequest) {
         try {
-            Vehicles updatedMosaic = mosaicService.updateMosaic(id, updatedMosaicRequest);
+            Mosaics updatedMosaic = mosaicService.updateMosaic(id, updatedMosaicRequest);
             return "Mosaic updated: " + updatedMosaic.getName();
         } catch (EntityNotFoundException e) {
             return e.getMessage();

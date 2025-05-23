@@ -30,6 +30,7 @@ public class SecurityConfig {
             "/mosaic/id/**",
             "/tools/all",
             "/tools/id/**",
+            "/upload",
     };// lista dozwolonych enpointów dla niezalogowanych
 
     private static final String[] CLIENT_ENDPONTS = {
@@ -46,6 +47,8 @@ public class SecurityConfig {
             "/tools/delete/**",
             "/user/all",
             "/order/all",
+            "/order/updateStatus/**",
+
     };//  lista endpointów dla admina
 
 

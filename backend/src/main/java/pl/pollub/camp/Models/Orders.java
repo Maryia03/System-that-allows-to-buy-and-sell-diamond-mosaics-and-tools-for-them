@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToMany;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter@Setter
 @Entity
 public class Orders {
 @Id

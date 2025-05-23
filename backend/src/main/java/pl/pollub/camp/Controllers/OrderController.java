@@ -33,7 +33,6 @@ public class OrderController {
     public @ResponseBody String addOrder(
             @RequestParam String comment,
             @RequestParam int userId,
-            @RequestParam OrderStatus orderStatus,
             @RequestParam(required = false) int mosaicId,
             @RequestParam(required = false) List<Integer> toolIds) {
 
@@ -51,7 +50,7 @@ public class OrderController {
                 toolRepository.findById(toolId).ifPresent(tools::add);
             }
             if (!tools.isEmpty() && tools.size() != toolIds.size()) {
-                return "One or more tools not found";
+                return "Tools not found";
             }
         }
 
@@ -61,10 +60,10 @@ public class OrderController {
 
         Orders o = new Orders();
         o.setComment(comment);
-        o.setOrderStatus(orderStatus);
         o.setUser(u);
         o.setMosaic(mosaic);
         o.setTools(tools);
+        o.setOrderStatus(OrderStatus.PAID);
 
         orderRepository.save(o);
         return "Order successfully created";
@@ -74,4 +73,24 @@ public class OrderController {
         return orderRepository.findAll();
     }
 
+    @PatchMapping(path = "/updateStatus/{orderId}")
+    public @ResponseBody String updateOrderStatus(
+            @PathVariable int orderId,
+            @RequestParam OrderStatus newStatus) {
+        Orders order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            return "Order not found";
+        }
+        OrderStatus currentStatus = order.getOrderStatus();
+
+        // правила перехода статусов
+        if (currentStatus == OrderStatus.PAID && newStatus == OrderStatus.PENDING ||
+                currentStatus == OrderStatus.PENDING && newStatus == OrderStatus.DELIVERED) {
+            order.setOrderStatus(newStatus);
+            orderRepository.save(order);
+            return "Order status updated to " + newStatus;
+        } else {
+            return "Invalid status transition from " + currentStatus + " to " + newStatus;
+        }
+    }
 }
