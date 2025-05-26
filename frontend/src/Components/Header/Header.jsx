@@ -23,8 +23,8 @@ const Header = () => {
     };
 
     return (
-        <Navbar fixed="top" collapseOnSelect expand="md" bg="light" variant="light">
-            <Container>
+        <Navbar collapseOnSelect expand="md" bg="light" variant="light">
+            <Container fluid className="no-padding">
                 <Navbar.Brand as={Link} to="/home" className="logo-container">
                     <img src={logo} className="d-inline-block align-top" alt="Logo" />
                 </Navbar.Brand>
@@ -45,7 +45,7 @@ const Header = () => {
                         ) : (
                             <>
                                 <Nav.Link as={Link} to="/reservations">Rezerwacje</Nav.Link>
-                                
+
                                 {/* Link do panelu administracyjnego, jeśli użytkownik jest administratorem */}
                                 {Cookies.get('admin') == "1" && (
                                     <Nav.Link as={Link} to="/admin">Panel Administratora</Nav.Link>
