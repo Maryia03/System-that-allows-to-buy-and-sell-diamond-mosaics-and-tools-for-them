@@ -5,16 +5,15 @@ const Footer = () => {
     return (
         <div className="contact-info">
             <div className="column">
-            <h2>Wynajem kamperów</h2>
-                <p>Anastazja: 792 632 632</p>
-                <p>Dawid 794 400 210</p>
-                <p>Maria 792 306 306</p>
+                <h2>Our support team</h2>
+                <p>Phone: +48 792 632 632</p>
+                <p>Email: mosaicapl@gmail.com</p>
             </div>
             <div className="separator"></div>
 
             <div className="column">
-                <h2>Oddział Lublin</h2>
-                <p>ul. Nadbystrzycka 36A</p>
+                <h2>Oddział Warszawa</h2>
+                <p>ul. Krakowska 36A</p>
             </div>
         </div>
     );

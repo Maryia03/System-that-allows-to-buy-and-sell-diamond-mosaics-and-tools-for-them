@@ -28,8 +28,8 @@ public class Orders {
     @ManyToOne
     private Users user;
     @Setter
-    @ManyToOne
-    private Mosaics mosaic;
+    @ManyToMany
+    private List<Mosaics> mosaics;
     @ManyToMany
     private List<Tools> tools;
 }

@@ -23,7 +23,7 @@
 .separator {
     width: 2px; /* Szerokość separatora */
     background-color: rgb(255, 255, 255); /* Kolor separatora na czarny */
-    height: 60px; /* Wysokość separatora */
+    height: 80px; /* Wysokość separatora */
     margin: 0 5px; /* Mniejszy margines wokół separatora */
 }
 

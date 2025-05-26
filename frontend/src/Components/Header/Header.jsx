@@ -1,7 +1,7 @@
 // Header.js
 import React, { useContext, useState } from 'react';
 import { Container, Navbar, Nav, Modal, Button } from 'react-bootstrap';
-import logo from './GoCamper.png';
+import logo from './LogoMosaic.png';
 import './Header.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';

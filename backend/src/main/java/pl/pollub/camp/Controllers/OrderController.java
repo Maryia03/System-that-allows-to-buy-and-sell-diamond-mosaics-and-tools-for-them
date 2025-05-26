@@ -15,6 +15,7 @@ import pl.pollub.camp.Repositories.ToolRepository;
 import pl.pollub.camp.Repositories.MosaicRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 @Controller
@@ -33,18 +34,23 @@ public class OrderController {
     public @ResponseBody String addOrder(
             @RequestParam String comment,
             @RequestParam int userId,
-            @RequestParam(required = false) int mosaicId,
+            @RequestParam(required = false) List<Integer> mosaicIds,
             @RequestParam(required = false) List<Integer> toolIds) {
 
         Users u = userRepository.findById(userId).orElse(null);
         if (u == null) {
             return "User not found";
         }
-        Mosaics mosaic = mosaicRepository.findById(mosaicId).orElse(null);
-        if (mosaic == null) {
-            return "Mosaic not found";
+        List<Mosaics> mosaics = new ArrayList<>();
+        if (mosaicIds != null) {
+            for (Integer mosaicId : mosaicIds) {
+                mosaicRepository.findById(mosaicId).ifPresent(mosaics::add);
+            }
+            if (!mosaics.isEmpty() && mosaics.size() != mosaicIds.size()) {
+                return "Mosaics not found";
+            }
         }
-        List<Tools> tools = new java.util.ArrayList<>();
+        List<Tools> tools = new ArrayList<>();
         if (toolIds != null) {
             for (Integer toolId : toolIds) {
                 toolRepository.findById(toolId).ifPresent(tools::add);
@@ -54,13 +60,15 @@ public class OrderController {
             }
         }
 
-        if (mosaic == null && tools.isEmpty()) {
+        if (mosaics.isEmpty() && tools.isEmpty()) {
             return "You must choose at least one product: a mosaic or tools.";
         }
 
         double totalCost = 0.0;
-        if (mosaic != null && mosaic.getPrice() != null) {
-            totalCost += mosaic.getPrice();
+        for (Mosaics mosaic : mosaics) {
+            if (mosaic.getPrice() != null) {
+                totalCost += mosaic.getPrice();
+            }
         }
         for (Tools tool : tools) {
             if (tool.getPrice() != null) {
@@ -71,7 +79,7 @@ public class OrderController {
         Orders o = new Orders();
         o.setComment(comment);
         o.setUser(u);
-        o.setMosaic(mosaic);
+        o.setMosaics(mosaics);
         o.setTools(tools);
         o.setOrderStatus(OrderStatus.PAID);
         o.setTotalCost(totalCost);
