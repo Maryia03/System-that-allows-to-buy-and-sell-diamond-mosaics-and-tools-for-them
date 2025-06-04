@@ -1,17 +1,20 @@
 import React from 'react';
-import AdminReservations from './AdminReservations'; // Importuj podstrony
+import AdminOrders from './AdminOrders';
 import AdminUsers from './AdminUsers';
-import AdminCampers from './AdminCampers';
-import { Routes, Route } from 'react-router-dom';
+import AdminMosaics from './AdminMosaics';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AdminTools from "./AdminTools";
 
 const AdminPage = () => {
     return (
         <div>
             <h1>Panel Administratora</h1>
             <Routes>
-                <Route path="reservations" element={<AdminReservations />} />
+                <Route path="/" element={<AdminMosaics />} />
+                <Route path="orders" element={<AdminOrders />} />
                 <Route path="users" element={<AdminUsers />} />
-                <Route path="campers" element={<AdminCampers />} />
+                <Route path="mosaics" element={<AdminMosaics />} />
+                <Route path="tools" element={<AdminTools />} />
             </Routes>
         </div>
     );

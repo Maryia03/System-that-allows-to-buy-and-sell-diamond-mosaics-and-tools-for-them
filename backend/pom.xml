@@ -12,9 +12,9 @@
 	</parent>
 
 	<groupId>pl.pollub</groupId>
-	<artifactId>camp</artifactId>
+	<artifactId>mosaic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>camp</name>
+	<name>mosaic</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -94,7 +94,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>pl.pollub.camp.CampApplication</mainClass>
+					<mainClass>pl.pollub.mosaic.MosaicApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

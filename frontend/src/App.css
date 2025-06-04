@@ -4,16 +4,28 @@
   box-sizing: border-box;
 }
 
-html, body {
-  width: 100vw;
-  overflow-x: hidden;
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  padding-bottom: 2rem;
 }
 
 .App {
   text-align: center;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Umożliwia wypełnienie wysokości ekranu */
+  min-height: 100vh;
   margin: 0;
   padding: 0;
 }
@@ -31,7 +43,7 @@ html, body {
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh; /* Możesz zmienić na auto, aby nie blokować stopki */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,14 +58,13 @@ html, body {
 }
 
 footer {
-  margin-top: auto; /* Umożliwia przesunięcie stopki na dół */
-  background-color: #f1f1f1; /* Kolor tła stopki */
-  padding: 20px; /* Padding dla stopki */
-  text-align: center; /* Wyśrodkowanie tekstu w stopce */
-  border-top: 1px solid #ccc; /* Delikatna linia u góry stopki */
+  margin-top: auto;
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ccc;
 }
 
-/* Możesz dodać inne style CSS dla mediów, jeśli chcesz */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -1,69 +1,65 @@
 .contact-info {
-    background-color: rgb(54, 54, 54); /* Tło na biało */
-    color: rgb(255, 255, 255); /* Kolor tekstu na czarny */
-    padding: 15px; /* Zmniejszenie paddingu */
+    background-color: rgb(54, 54, 54);
+    color: rgb(255, 255, 255);
+    padding: 15px;
     margin-top: 20px;
-    display: flex; /* Użycie flexboxa */
-    justify-content: space-between; /* Rozmieszczenie kolumn */
-    font-family: 'Poppins', sans-serif; /* Czcionka */
-    font-size: 0.8rem; /* Zmniejszenie rozmiaru czcionki */
-    flex-wrap: wrap; /* Umożliwia zawijanie kolumn */
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
 }
 
 .column {
-    flex: 1; /* Równa ilość miejsca dla każdej kolumny */
-    margin: 5px; /* Mniejszy margines */
+    flex: 1;
+    margin: 5px;
 }
 .column p {
-    margin: 1px 0; /* Zmniejszenie odstępów między tekstami */
+    margin: 1px 0;
 }
 
-
-/* Separator */
 .separator {
-    width: 2px; /* Szerokość separatora */
-    background-color: rgb(255, 255, 255); /* Kolor separatora na czarny */
-    height: 80px; /* Wysokość separatora */
-    margin: 0 5px; /* Mniejszy margines wokół separatora */
+    width: 2px;
+    background-color: rgb(255, 255, 255);
+    height: 80px;
+    margin: 0 5px;
 }
 
-/* Nagłówki */
 .column h2 {
-    color: #ffffff; /* Kolor boaly */
-    margin: 3px 0; /* Mniejszy odstęp między nagłówkami */
+    color: #ffffff;
+    margin: 3px 0;
     font-size: 1.2rem;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
     .contact-info {
-        flex-direction: column; /* Zawijanie kolumn na mniejszych ekranach */
-        align-items: center; /* Wyśrodkowanie zawartości */
+        flex-direction: column;
+        align-items: center;
     }
 
     .column {
-        width: 100%; /* Kolumny zajmują całą szerokość */
-        margin: 5px 0; /* Mniejsze marginesy w pionie */
+        width: 100%;
+        margin: 5px 0;
     }
     .separator {
-        width: 70%; /* Szerokość separatora na 100% na małych ekranach */
-        height: 2px; /* Zwiększenie wysokości separatora na małych ekranach */
-        margin: 10px 0; /* Margines w pionie */
+        width: 70%;
+        height: 2px;
+        margin: 10px 0;
     }
 }
 
 @media (max-width: 480px) {
     .contact-info {
-        font-size: 0.7rem; /* Jeszcze mniejszy rozmiar czcionki na bardzo małych ekranach */
-        padding: 10px; /* Dalsze zmniejszenie paddingu */
+        font-size: 0.7rem;
+        padding: 10px;
     }
 
     .column h2 {
-        font-size: 1.2rem; /* Zmniejszenie rozmiaru nagłówków w kolumnach */
-        margin: 1px 0; /* Jeszcze mniejszy odstęp między nagłówkami */
+        font-size: 1.2rem;
+        margin: 1px 0;
     }
 
     .column p {
-        margin: 1px 0; /* Zmniejszenie odstępów między tekstami */
+        margin: 1px 0;
     }
 }

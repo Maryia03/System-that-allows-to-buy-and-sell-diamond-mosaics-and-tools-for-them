@@ -1,126 +1,120 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './Components/Header/Header';
 import AdminHeader from './Components/Header/AdminHeader'; // Nagłówek dla administratora
-import Contact from './Components/Pages/Contact';
 import Footer from './Components/Footer/Footer';
-import Home from './Components/Pages/Home';
-import AboutUs from './Components/Pages/AboutUs';
 import LogIn from './Components/Pages/LogIn';
 import Register from './Components/Pages/Register';
-import Camper from './Components/Pages/Camper';
-import Reservations from './Components/Pages/Reservations';
 import AdminPage from './Components/Pages/Admin/AdminPage';
-import CamperDetails from './Components/Pages/Campers/CamperDetails';
-import Camper1 from './Components/Pages/Campers/Camper1';
-import Camper2 from './Components/Pages/Campers/Camper2';
-import Camper3 from './Components/Pages/Campers/Camper3';
-import Camper4 from './Components/Pages/Campers/Camper4';
+import MosaicDetails from './Components/Pages/Details/MosaicDetails';
 import AdminUsers from './Components/Pages/Admin/AdminUsers';
-import AdminCampers from './Components/Pages/Admin/AdminCampers';
-import AdminReservations from './Components/Pages/Admin/AdminReservations';
-import AdminRepairs from './Components/Pages/Admin/AdminRepairs';
-import AdminReports from './Components/Pages/Admin/AdminReports';
-import AdminPrices from './Components/Pages/Admin/AdminPrices';
-import AdminInsurances from './Components/Pages/Admin/AdminInsurances';
+import AdminMosaics from './Components/Pages/Admin/AdminMosaics';
+import AdminTools from './Components/Pages/Admin/AdminTools';
+import AdminOrders from './Components/Pages/Admin/AdminOrders';
 import { AuthContext } from './Context/AuthContext';
 import Cookies from 'js-cookie'
-import AdminLocationsLocations from './Components/Pages/Admin/AdminLocations';
-import AdminLocations from './Components/Pages/Admin/AdminLocations';
-const App = () => {
-    const {  addReservation, removeReservation, logout } = useContext(AuthContext);
+import MosaicList from "./Components/Pages/MosaicList";
+import ToolList from "./Components/Pages/ToolList";
+import Cart from "./Components/Pages/Cart";
+import ToolDetails from "./Components/Pages/Details/ToolDetails";
+import Orders from './Components/Pages/Orders';
 
+const AppContent = () => {
+    const { logout } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(null);
-    const [campersData, setCampersData] = useState([]);
+    const [mosaicsData, setMosaicsData] = useState([]);
+    const [toolsData, setToolsData] = useState([]);
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    // Wczytanie danych kamperów z localStorage
     useEffect(() => {
-        const savedCampers = JSON.parse(localStorage.getItem('campers')) || [];
-        setCampersData(savedCampers);
-        if(Cookies.get("admin") == '1'){
-            setCurrentUser({role: 'admin'})
+        const savedMosaics = JSON.parse(localStorage.getItem('mosaics')) || [];
+        setMosaicsData(savedMosaics);
+        if(Cookies.get("admin") === '1'){
+            setCurrentUser({role: 'admin'});
         }
-        
+    }, []);
+
+    useEffect(() => {
+        const ignorePaths = ['/login', '/register'];
+        if (!ignorePaths.includes(location.pathname)) {
+            localStorage.setItem('lastVisitedPath', location.pathname);
+        }
+    }, [location]);
+
+    useEffect(() => {
+        const savedPath = localStorage.getItem('lastVisitedPath');
+        const currentPath = window.location.pathname;
+        if (
+            savedPath &&
+            savedPath !== currentPath &&
+            !['/login', '/register'].includes(savedPath)
+        ) {
+            navigate(savedPath, { replace: true });
+        }
     }, []);
 
     return (
-        <Router>
-            <div className="App">
-                {/* Renderowanie nagłówka w zależności od roli użytkownika */}
-                {Cookies.get('admin') == "1" ? (
-                    <AdminHeader />
-                ) : (
-                    <Header currentUser={Cookies.get('user_id')} logout={logout} />
-                )}
-                
+        <div className="App">
+            {Cookies.get('admin') === "1" ? (
+                <AdminHeader />
+            ) : (
+                <Header currentUser={Cookies.get('user_id')} logout={logout} />
+            )}
 
-                <main>
-                    <Routes>
-                        {/* Publiczne trasy */}
-                        <Route path="/" element={<Home />} />
-                        <Route path="/home" element={<Home />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/aboutus" element={<AboutUs />} />
-                        <Route path="/login" element={Cookies.get('user_id') ? <Navigate to="/" /> : <LogIn />} />
-                        <Route path="/register" element={Cookies.get('user_id') ? <Navigate to="/" /> : <Register />} />
-                        <Route path="/camper/:camperId" element={<CamperDetails addReservation={addReservation} />} />
-                        {/* <Route path="/camper/2" element={<Camper2 addReservation={addReservation} />} />
-                        <Route path="/camper/3" element={<Camper3 addReservation={addReservation} />} /> */}
-                        <Route path='/static' element={<Camper1 addReservation={addReservation}/>} />
-                        <Route path="/camper" element={<Camper addReservation={addReservation} />} />
-                        <Route path="/reservations" element={<Reservations removeReservation={removeReservation} />} />
+            <main>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            Cookies.get('admin') === '1'
+                                ? <Navigate to="/admin/mosaics" replace />
+                                : <MosaicList mosaics={mosaicsData} />
+                        }
+                    />
+                    <Route path="/login" element={Cookies.get('user_id') ? <Navigate to="/" /> : <LogIn />} />
+                    <Route path="/register" element={Cookies.get('user_id') ? <Navigate to="/" /> : <Register />} />
+                    <Route path="/mosaics/:id" element={<MosaicDetails />} />
+                    <Route path="/tools/:id" element={<ToolDetails />} />
+                    <Route path="/mosaics" element={<MosaicList mosaics={mosaicsData} />} />
+                    <Route path="/tool" element={<ToolList tools={toolsData} />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/cart" element={<Cart />} />
 
-                        {/* Trasy administracyjne */}
-                        <Route 
-                            path="/admin" 
-                            element={currentUser?.role === 'admin' ? <AdminPage /> : <Navigate to="/" />}
-                        />
-                        <Route 
-                            path="/admin/users" 
-                            element={currentUser?.role === 'admin' ? <AdminUsers /> : <Navigate to="/" />}
-                        />
-                        <Route 
-                            path="/admin/campers" 
-                            element={currentUser?.role === 'admin' ? <AdminCampers campersData={campersData} setCampersData={setCampersData} /> : <Navigate to="/" />}
-                        />
-                        <Route 
-                            path="/admin/reservations" 
-                            element={currentUser?.role === 'admin' ? <AdminReservations /> : <Navigate to="/" />}
-                        />
-                        <Route
-                            path="/admin/repairs"
-                            element={currentUser?.role === 'admin' ? <AdminRepairs /> : <Navigate to="/" />}
-                        />
-                        <Route
-                            path="/admin/reports"
-                            element={currentUser?.role === 'admin' ? <AdminReports /> : <Navigate to="/" />}
-                        />
-                        <Route
-                            path="/admin/prices"
-                            element={currentUser?.role === 'admin' ? <AdminPrices /> : <Navigate to="/" />}
-                        />
-                        <Route
-                            path='/admin/locations'
-                            element={currentUser?.role === 'admin' ? <AdminLocations /> : <Navigate to="/" />}
-                            />
-                        <Route
-                           path="/admin/insurances"
-                           element={currentUser?.role === 'admin' ? (<AdminInsurances campersData={campersData} />
-                           ) : (
-                               <Navigate to="/" />
-                           )}
-                       />
-                       
-
-                        
-                    </Routes>
-                </main>
-                <Footer />
-            </div>
-        </Router>
+                    <Route
+                        path="/admin"
+                        element={currentUser?.role === 'admin' ? <AdminPage /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/admin/users"
+                        element={currentUser?.role === 'admin' ? <AdminUsers /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/admin/mosaics"
+                        element={currentUser?.role === 'admin' ? <AdminMosaics mosaicsData={mosaicsData} setMosaicsData={setMosaicsData} /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/admin/tools"
+                        element={currentUser?.role === 'admin' ? <AdminTools /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/admin/orders"
+                        element={currentUser?.role === 'admin' ? <AdminOrders /> : <Navigate to="/" />}
+                    />
+                </Routes>
+            </main>
+            <Footer />
+        </div>
     );
 };
+
+
+const App = () => (
+    <Router>
+        <AppContent />
+    </Router>
+);
 
 export default App;

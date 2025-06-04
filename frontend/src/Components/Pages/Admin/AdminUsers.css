@@ -1,49 +1,40 @@
-/* Main container styling */
 .admin-users-container {
     padding: 60px;
     font-family: Arial, sans-serif;
 }
 
-/* Heading styling */
 .admin-users-container h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-/* Table styling */
 .users-table {
     width: 100%;
     margin-top: 20px;
 }
 
-/* Table header and row styling */
 .users-table th, .users-table td {
     text-align: center;
     padding: 10px;
     font-size: 16px;
 }
 
-/* Action buttons styling */
 .action-button {
     margin-right: 10px;
 }
 
-/* Media queries for responsive design */
 @media (max-width: 768px) {
-    /* Stack table headers and data for smaller screens */
     .users-table th, .users-table td {
         font-size: 14px;
         padding: 8px;
     }
 
-    /* Adjust button size and layout */
     .action-button {
         padding: 8px;
         font-size: 14px;
     }
 
-    /* Make the table scrollable horizontally */
     .users-table {
         overflow-x: auto;
         display: block;
@@ -52,7 +43,6 @@
 }
 
 @media (max-width: 480px) {
-    /* Further adjustments for very small screens */
     .admin-users-container h1 {
         font-size: 18px;
         width: 100%;

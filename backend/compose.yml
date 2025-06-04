@@ -3,10 +3,10 @@ version: '3.8'
 services:
   mysql:
     image: mysql:lts
-    container_name: camp_db
+    container_name: mosaic_db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: camp
+      MYSQL_DATABASE: mosaic
     ports:
       - "3306:3306"
     volumes:

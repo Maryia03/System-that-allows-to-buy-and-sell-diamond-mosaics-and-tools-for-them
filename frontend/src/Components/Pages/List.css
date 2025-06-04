@@ -1,0 +1,75 @@
+.list-container {
+    max-width: 1200px;
+    margin: 80px auto 40px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.list-filters {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.list-filters select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.list-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-content: center;
+    gap: 20px;
+}
+
+.list-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+}
+
+.list-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.list-card img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.list-card h4 {
+    font-size: 18px;
+    margin: 10px 0 5px 0;
+    color: #333;
+}
+
+.list-card p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 15px;
+}
+
+@media (max-width: 600px) {
+    .list-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .list-grid {
+        grid-template-columns: 1fr;
+    }
+}

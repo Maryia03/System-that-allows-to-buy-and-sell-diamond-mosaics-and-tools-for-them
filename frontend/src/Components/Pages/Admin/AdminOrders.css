@@ -1,0 +1,69 @@
+.orders-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.orders-page h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-card h4 {
+    margin-top: 0;
+}
+
+.order-card p {
+    margin: 4px 0;
+}
+
+.order-card h5 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.admin-status-control {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-status-control select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    min-width: 140px;
+}
+
+.admin-status-control button {
+    padding: 6px 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-status-control button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.admin-status-control button:hover:not(:disabled) {
+    background-color: #0056b3;
+}

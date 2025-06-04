@@ -1,24 +1,29 @@
-/* Nagłówek */
 .navbar {
     top: 0;
     left: 0;
     right: 0;
-    margin: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     width: 100%;
     padding-top: 0rem;
     padding-bottom: 0rem;
-    z-index: 1000; /* Upewnij się, że nagłówek jest nad innymi elementami */
+    z-index: 1000;
     justify-content: space-between;
     align-items: center;
-    background-color: #f8f9fa; /* Kolor tła nagłówka */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Cień dla nagłówka */
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo */
+.navbar > .container,
+.navbar > .container-fluid {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
 .logo-container img {
-    height: 5rem; /* 70px w remach */
+    height: 5rem;
 }
 .logo-container {
     margin-right: 1rem;
@@ -33,102 +38,101 @@
     padding-left: 0rem;
     max-width: 100%;
 }
-/* Nawigacja */
+
 .navbar-nav {
-    display: flex; /* Umożliwia ustawienie elementów w poziomie */
+    display: flex;
 }
 
 .navbar-nav .nav-link {
-    font-size: 1.25rem; /* Zwiększono rozmiar czcionki do 20px */
-    color: #333; /* Kolor tekstu linków */
-    transition: background-color 0.3s, color 0.3s; /* Płynne przejście */
-    padding: 10px 15px; /* Dodanie paddingu dla lepszego obszaru klikalnego */
-    margin: 0 5px; /* Odstęp między linkami */
-}
-
-.navbar-nav .nav-link:hover {
-    text-decoration: underline;
-    background-color: #9e9f9f; /* Kolor tła przy najeżdżaniu */
-    color: #000000; /* Kolor tekstu przy najeżdżaniu */
-}
-
-/* Przyciski toggle */
-.navbar-toggler {
-    background: #fff; /* Kolor tła przycisku */
-    border: 1px solid #8c8c8c; /* Krawędź przycisku */
-    border-radius: 5px; /* Zaokrąglenie krawędzi */
-    display: flex;
-    align-items: center;
-}
-
-.navbar-toggler:hover {
-    background-color: #e0e0e0; /* Kolor tła przy najeżdżaniu */
-}
-
-/* Linia */
-.line {
-    background-color: #0e0e0e; /* Kolor linii */
-    height: 5px; /* Grubość linii */
-    width: 100%; /* Szerokość linii */
-    margin: 2px 0; /* Odstęp między liniami */
-    transition: all 0.3s ease; /* Animacja przejścia */
-}
-
-.navbar-toggler.active .line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg); /* Przesunięcie i obrót górnej linii */
-}
-
-.navbar-toggler.active .line:nth-child(2) {
-    opacity: 0; /* Ukrycie środkowej linii */
-}
-
-.navbar-toggler.active .line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg); /* Przesunięcie i obrót dolnej linii */
-}
-
-/* Responsywne style */
-@media (max-width: 576px) {
-    .navbar-collapse {
-        padding: 0.625rem; /* 10px w remach */
-        background-color: #f0f0f0; /* Tło bloku po rozwinięciu */
-        border-radius: 8px; /* Opcjonalnie: zaokrąglenie krawędzi */
-    }
-
-    .navbar-nav {
-        flex-direction: column; 
-        width: 100%; 
-        align-items: stretch; /* Wyśrodkowanie linków */
-    }
-
-    .navbar-nav .nav-link {
-        display: block; /* Umożliwia, że tło zajmuje całą szerokość */
-        padding: 10px 15px; /* Dodanie paddingu dla lepszego obszaru klikalnego */
-        margin: 0.625rem 0; /* 10px w remach */
-        font-size: 1rem; /* 16px w remach */
-        text-align: center; /* Wyśrodkowanie linków w mniejszych ekranach */
-        background-color: transparent; /* Domyślne tło dla linków */
-        transition: background-color 0.3s; /* Płynna zmiana tła */
-    }
+    font-size: 1.25rem;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 10px 15px;
+    margin: 0 5px;
 
     .navbar-nav .nav-link:hover {
-        background-color: #9e9f9f; /* Kolor tła przy najeżdżaniu */
-        color: #000000; /* Kolor tekstu przy najeżdżaniu */
+        text-decoration: underline;
+        background-color: #9e9f9f;
+        color: #000000;
     }
 
-    .logo-container img {
-        height: 3.75rem; /* 60px w remach */
+    .navbar-toggler {
+        background: #fff;
+        border: 1px solid #8c8c8c;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
     }
-}
-.no-padding {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-}
 
-/* Klasa dla głównej zawartości */
-.main-content {
-    padding-top: 70px; /* Ustawienie paddingu, aby uniknąć zasłaniania */
+    .navbar-toggler:hover {
+        background-color: #e0e0e0;
+    }
+
+
+    .line {
+        background-color: #0e0e0e;
+        height: 5px;
+        width: 100%;
+        margin: 2px 0;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler.active .line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .navbar-toggler.active .line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .navbar-toggler.active .line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+
+    @media (max-width: 576px) {
+        .navbar-collapse {
+            padding: 0.625rem;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .navbar-nav .nav-link {
+            display: block;
+            padding: 10px 15px;
+            margin: 0.625rem 0;
+            font-size: 1rem;
+            text-align: center;
+            background-color: transparent;
+            transition: background-color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #9e9f9f;
+            color: #000000;
+        }
+
+        .logo-container img {
+            height: 3.75rem;
+        }
+    }
+
+    .no-padding {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .main-content {
+        padding-top: 5.5rem;
+    }
 }

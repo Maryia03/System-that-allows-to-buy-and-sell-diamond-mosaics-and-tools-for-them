@@ -1,0 +1,33 @@
+package pl.pollub.mosaic.Models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+import java.util.List;
+import jakarta.persistence.ManyToMany;
+
+import java.security.Timestamp;
+import java.time.LocalDateTime;
+
+@Getter@Setter
+@Entity
+public class Orders {
+@Id
+    @GeneratedValue
+    private int Id;
+    @Setter
+    private OrderStatus orderStatus;
+    @Setter
+    private Double totalCost;
+    @Setter
+    @ManyToOne
+    private Users user;
+    @Setter
+    @ManyToMany
+    private List<Mosaics> mosaics;
+    @ManyToMany
+    private List<Tools> tools;
+}

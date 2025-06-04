@@ -1,0 +1,77 @@
+.mosaic-details,
+.tool-details {
+    width: 100%;
+    padding: 40px 60px;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.mosaic-details h2,
+.tool-details h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mosaic-main-image,
+.tool-main-image {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mosaic-info h2,
+.tool-info h2 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.mosaic-info,
+.tool-info {
+    flex: 1;
+    font-size: 18px;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.mosaic-info p,
+.tool-info p {
+    margin: 8px 0;
+}
+
+.add-to-cart-button {
+    display: block;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: 30px;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-button:hover {
+    background-color: #218838;
+}
+
+.status-message {
+    text-align: center;
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.mosaic-content,
+.tool-content {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}

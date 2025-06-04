@@ -1,21 +1,18 @@
-// Header.js
 import React, { useContext, useState } from 'react';
 import { Container, Navbar, Nav, Modal, Button } from 'react-bootstrap';
 import logo from './LogoMosaic.png';
 import './Header.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
-import LogIn from '../Pages/LogIn';  // Zaimportuj komponent logowania
+import LogIn from '../Pages/LogIn';
 import Cookies from 'js-cookie'
 
 const Header = () => {
-
     const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [showLoginModal, setShowLoginModal] = useState(false);  // Stan dla modala logowania
-
-    const handleLoginModalClose = () => setShowLoginModal(false);  // Funkcja zamykająca modal
-    const handleLoginModalShow = () => setShowLoginModal(true);   // Funkcja otwierająca modal
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const handleLoginModalClose = () => setShowLoginModal(false);
+    const handleLoginModalShow = () => setShowLoginModal(true);
 
     const handleLogout = () => {
         logout();
@@ -23,7 +20,7 @@ const Header = () => {
     };
 
     return (
-        <Navbar collapseOnSelect expand="md" bg="light" variant="light">
+        <Navbar collapseOnSelect expand="md" bg="light" variant="light" className="no-padding">
             <Container fluid className="no-padding">
                 <Navbar.Brand as={Link} to="/home" className="logo-container">
                     <img src={logo} className="d-inline-block align-top" alt="Logo" />
@@ -32,11 +29,10 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
                     <Nav>
-                        <Nav.Link as={Link} to="/home">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/aboutUs">About Us</Nav.Link>
-                        <Nav.Link as={Link} to="/contact">Kontakt</Nav.Link>
-                        <Nav.Link as={Link} to="/camper">Campery</Nav.Link>
-
+                        <Nav.Link as={Link} to="/">Mosaics</Nav.Link>
+                        <Nav.Link as={Link} to="/tool">Tools</Nav.Link>
+                        <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
+                        <Nav.Link as={Link} to="/orders">Moje Zamówienia</Nav.Link>
                         {!Cookies.get('user_id') ? (
                             <>
                                 <Nav.Link onClick={handleLoginModalShow}>Logowanie</Nav.Link>
@@ -44,7 +40,6 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Nav.Link as={Link} to="/reservations">Rezerwacje</Nav.Link>
 
                                 {/* Link do panelu administracyjnego, jeśli użytkownik jest administratorem */}
                                 {Cookies.get('admin') == "1" && (

@@ -5,17 +5,20 @@ import Cookies from 'js-cookie'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const [mosaics, setMosaics] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);  // Stan dla aktualnego użytkownika
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("");
     const [users, setUsers] = useState([]);  // Stan dla wszystkich użytkowników
-    const [reservations, setReservations] = useState([]); // Stan dla rezerwacji
+    const [orders, setOrders] = useState([]); // Stan dla rezerwacji
     const [notifications, setNotifications] = useState([]);
+    const [cart, setCart] = useState([]);
+    const [tools, setTools] = useState([]);
 
     const config = {
         headers: { 'Authorization': `Bearer ${Cookies.get("user_key")}` }
     };
 
-    // Pobieranie danych z localStorage przy uruchomieniu
+    //Pobieranie danych z localStorage przy uruchomieniu
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem('currentUser'));
         if (storedUser) {
@@ -23,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         }
 
 
-        // Pobieramy użytkowników z localStorage
+        //Pobieramy użytkowników z localStorage
         const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
         const updatedUsers = storedUsers.map(user => {
             if (!user.registeredAt) {
@@ -39,43 +42,62 @@ export const AuthProvider = ({ children }) => {
             // const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
             // const userReservations = storedReservations.filter(reservation => reservation.userId === storedUser.id);
             // setReservations(userReservations);
-            
+
         }
 
         if(Cookies.get("admin") == '1'){
             setCurrentUser({role: 'admin'})
         }
 
-        const storedInsurances = JSON.parse(localStorage.getItem('insurances')) || [];
-        setInsurances(storedInsurances);
+
+        //Ładujemy koszyk
+        const storedCart = JSON.parse(localStorage.getItem('cart'));
+        if (storedCart && Array.isArray(storedCart)) {
+            setCart(storedCart);
+        }
+
+        getAllMosaics();
+        getAllTools();
     }, []);
 
-    // Funkcja do logowania użytkownika
+    useEffect(() => {
+        console.log('Cart changed:', cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
+
+    //Funkcja do logowania użytkownika
     const login = (user, password) => {
         var data = { email: user, password: password }
         // console.log("login: " + JSON.stringify(data))
-        axios.post("http://localhost:8080/auth/login", data
-        ).then((res) => {
-            console.log((res));
-            if(res.data == "invalid user data"){
-                alert(res.data)
-                return ;
-            }
-            // document.cookie = 'user_key=' + res.data.token + ';expires=' + new Date(new Date().getTime() + 3600000).toGMTString() + ';'
-            var thirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
-            Cookies.set("user_id",res.data.id,{expires: thirtyMinutes})
-            Cookies.set("user_key",res.data.token,{expires: thirtyMinutes})
-            if(res.data.admin == true){
-                Cookies.set("admin","1",{expires: thirtyMinutes})
-            }
-            setErrorMessage('')
-            window.location.reload();
-        }).catch(function (error) {
-            console.log(error);
-            setErrorMessage("Nieprawidłowe dane logowania")
-            console.log(errorMessage)
-            return false;
-        });
+        axios.post("http://localhost:8080/auth/login", data)
+            .then((res) => {
+                console.log((res));
+                if (res.data == "invalid user data") {
+                    alert(res.data);
+                    return;
+                }
+
+                var thirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
+                Cookies.set("user_id", res.data.id, { expires: thirtyMinutes });
+                Cookies.set("user_key", res.data.token, { expires: thirtyMinutes });
+
+                if (res.data.admin === true) {
+                    Cookies.set("admin", "1", { expires: thirtyMinutes });
+                    setCurrentUser({ role: 'admin' });
+                } else {
+                    setCurrentUser(res.data);
+                    localStorage.setItem('currentUser', JSON.stringify(res.data));
+                }
+
+                setErrorMessage('');
+                window.location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+                setErrorMessage("Nieprawidłowe dane logowania");
+                return false;
+            });
+
 
 
 
@@ -90,16 +112,19 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        setReservations([]);
-        Cookies.remove("user_key")
-        Cookies.remove("user_id")
-        Cookies.remove("admin")
-        // localStorage.removeItem('currentUser'); // Usuwamy użytkownika z localStorage
-        // localStorage.removeItem('reservations'); // Usuwamy rezerwacje z localStorage
-    };
+        setOrders([]);
+        setCart([]);
+        setCurrentUser(null);
 
-    const register = (newUser) => {
+        Cookies.remove("user_key");
+        Cookies.remove("user_id");
+        Cookies.remove("admin");
 
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('cart');
+    }
+
+        const register = (newUser) => {
         var data = {
             email: newUser.email,
             username: newUser.firstName + " " + newUser.lastName,
@@ -131,60 +156,50 @@ export const AuthProvider = ({ children }) => {
         // login(newUser);
     };
 
-    const addReservation = (newReservation) => {
-
-        
-        if (Cookies.get("user_key") == "undefined"  || !Cookies.get("user_key")) {
-            alert("Musisz być zalogowany, aby dodać rezerwację.");
+    const addOrder = async (mosaicIds = [], toolIds = []) => {
+        if (!Cookies.get("user_id") || !Cookies.get("user_key")) {
+            alert("Musisz być zalogowany, aby złożyć zamówienie.");
             return;
         }
-        const config = {
-            headers: { 'Authorization': `Bearer ${Cookies.get("user_key")}` }
+
+        const params = {
+            userId: Cookies.get("user_id"),
         };
-        var data = {
 
-            vehicleId: newReservation.vehicleId,
-            reservationStartDate: (newReservation.reservationStartDate),
-            reservationEndDate: (newReservation.reservationEndDate),
-            comments: "string",
-            location: newReservation.location
-
+        if (mosaicIds.length > 0) {
+            params.mosaicIds = mosaicIds;
         }
-        console.log("auth:")
-        console.log(newReservation)
-        console.log(data)
-        axios.post("http://localhost:8080/reservation", data, config)
-            .then((res) => {
-                console.log(res)
-                if(res.data != "Success")
-                    alert(res.data)
-            }).catch((err) => {
-                console.log(err)
-            })
 
+        if (toolIds.length > 0) {
+            params.toolIds = toolIds;
+        }
 
-        // newReservation.userId = currentUser.id; // Przypisujemy rezerwację do użytkownika
+        try {
+            const res = await axios.post("http://localhost:8080/order/addOrder", null, {
+                params,
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("user_key")}`,
+                },
+            });
 
-        // setReservations((prevReservations) => {
-        //     const updatedReservations = [...prevReservations, newReservation];
-        //     const allReservations = JSON.parse(localStorage.getItem('reservations')) || [];
-        //     allReservations.push(newReservation); // Dodajemy rezerwację do globalnego zbioru
-        //     localStorage.setItem('reservations', JSON.stringify(allReservations)); // Zapisujemy do localStorage
-        //     return updatedReservations;
-        // });
-
+            alert(res.data);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy składaniu zamówienia");
+            return null;
+        }
     };
 
-    // Funkcja do usuwania rezerwacji
-    const removeReservation = (reservationId) => {
-        axios.delete(`http://localhost:8080/reservation/${reservationId}`,config)
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            console.log(err)
-            alert(err)
-        })
+    const getOrders = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/order/allOrders", config);
+            setOrders(res.data);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd podczas pobierania wszystkich zamówień");
+        }
     };
 
     const getAllUsers = async () =>{
@@ -220,87 +235,6 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
-    const getReservationsByUserId = async (id) =>{
-        console.log("get reservations by user id")
-        if (id==undefined){
-           return axios.get("http://localhost:8080/reservation/all",config)
-            .then((res)=>{
-                console.log(res.data)
-                return res.data
-            })
-            .catch((err)=>{
-                console.log(err)
-                alert(err)
-            })
-        }
-    }
-
-    const getVehicleReservations = async (id) =>{
-        console.log("get reservations by vehicle id")
-        return axios.get("http://localhost:8080/reservation/vehicle/"+id,config)
-            .then((res)=>{
-                console.log(res.data)
-                return res.data
-            })
-            .catch((err)=>{
-                console.log(err)
-                alert(err)
-            })
-    }
-
-    const acceptReservation = async (id) => {
-        console.log("accept reservation"+id)
-
-        return axios.get(`http://localhost:8080/reservation/accept/${id}`,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const getAllInsurances = async () =>{
-        console.log("get insurance")
-        return axios.get("http://localhost:8080/inspection/all",config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const addInsurance = async (insuranceData) =>{
-        console.log("add insurance")
-        axios.post('http://localhost:8080/inspection/create',insuranceData,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const updateInsurance = async (data) => {
-        console.log("update insuracne")
-        axios.patch('http://localhost:8080/inspection/update/'+data.id,data,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
     const deleteUser = (userId) =>{
         console.log("delete user")
 
@@ -313,277 +247,172 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
-    const cancelReservation = async(id) =>{
-        console.log("cancel reservation")
+    const addMosaic = async (mosaicData) => {
+        try {
+            const res = await axios.post("http://localhost:8080/mosaic/add", mosaicData, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy dodawaniu mozaiki");
+        }
+    };
 
-        return axios.get(`http://localhost:8080/reservation/cancel/${id}`,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
+    const getAllMosaics = async () => {
+        const response = await fetch("http://localhost:8080/mosaic/all");
+        const data = await response.json();
+        setMosaics(data);
+        return data;
+    };
 
-    const resignReservation = async(id) =>{
-        console.log("resign reservation")
+    const refreshMosaics = () => getAllMosaics();
 
-        return axios.get(`http://localhost:8080/reservation/resign/${id}`,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-    const getCamperById = () =>{
-        console.log("get camper by id")
-    }
-    const getAllCampers = async ()=>{
-        console.log("all campers")
+    const getMosaicById = async (id) => {
+        try {
+            const res = await axios.get(`http://localhost:8080/mosaic/id/${id}`, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Mozaika nie znaleziona");
+        }
+    };
 
-        return axios.get(`http://localhost:8080/vehicle/all`,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
+    const deleteMosaic = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:8080/mosaic/delete/${id}`, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy usuwaniu mozaiki");
+        }
+    };
 
-    const getAllPrices = async ()=>{
-        console.log("all prices")
+    const updateMosaic = async (mosaicData) => {
+        try {
+            const res = await axios.patch(`http://localhost:8080/mosaic/update/${mosaicData.id}`, mosaicData, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy aktualizacji mozaiki");
+        }
+    };
 
-        return axios.get(`http://localhost:8080/prices/all`,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
+    const addTool = async (toolData) => {
+        try {
+            const res = await axios.post("http://localhost:8080/tool/add", toolData, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy dodawaniu narzędzia");
+        }
+    };
 
-    const addPrice = async (priceData) => {
-        console.log("add prices")
+    const getAllTools = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/tool/all", config);
+            setTools(res.data);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy pobieraniu narzędzi");
+        }
+    };
 
-        return axios.post(`http://localhost:8080/prices/add`,priceData,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-        
-    }
-    const getReservations = () => {
-        console.log("get reservations")
-    }
+    const getToolById = async (id) => {
+        try {
+            const res = await axios.get(`http://localhost:8080/tool/id/${id}`, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Narzędzie nie znalezione");
+        }
+    };
 
+    const deleteTool = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:8080/tool/delete/${id}`, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy usuwaniu narzędzia");
+        }
+    };
 
-    const addCamper = (camperData) =>{
-        console.log("add camper")
-        axios.post("http://localhost:8080/vehicle/add",camperData,config)
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            alert(err)
-            console.log(err)
-        })
-    }
+    const updateTool = async (toolData) => {
+        try {
+            const res = await axios.patch(`http://localhost:8080/tool/update/${toolData.id}`, toolData, config);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Błąd przy aktualizacji narzędzia");
+        }
+    };
 
-    const deleteCamper = (camperId) =>{
-        console.log("delete camper: "+camperId)
-        axios.delete(`http://localhost:8080/vehicle/delete/${camperId}`,config)
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            alert(err)
-            console.log(err)
-        })
-    }
+    const addToCart = (item) => {
+        setCart(prevCart => [...prevCart, item]);
+    };
 
-    const updateCamper = (camperData) =>{
-        console.log("update camper")
-        console.log(camperData)
+    const deleteFromCart = (itemId) => {
+        setCart(prevCart => prevCart.filter(item => item.id !== itemId));
+    };
 
-        axios.patch(`http://localhost:8080/vehicle/update/${camperData.id}`,camperData,config)
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            alert(err)
-            console.log(err)
-        })
-    }
+    const clearCart = () => {
+        setCart([]);
+    };
 
-    const setInsurances = () =>{
-        console.log("set insurances")
-    }
+    const submitOrder = async () => {
+        if (!currentUser || cart.length === 0) {
+            alert("Musisz być zalogowany i mieć produkty w koszyku");
+            return;
+        }
 
-    const createPickupReport = async(report)=>{
-        console.log("create pickup report")
-        return axios.post("http://localhost:8080/reports/pickup",report,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
+        const mosaicIds = cart.filter(item => item.type !== 'tool').map(item => item.id);
+        const toolIds = cart.filter(item => item.type === 'tool').map(item => item.id);
+        try {
+            const res = await axios.post(
+                "http://localhost:8080/order/addOrder",
+                null,
+                {
+                    params: {
+                        userId: Cookies.get("user_id"),
+                        mosaicIds: mosaicIds.length > 0 ? mosaicIds : null,
+                        toolIds: toolIds.length > 0 ? toolIds : null
+                    },
+                    headers: { Authorization: `Bearer ${Cookies.get("user_key")}` }
+                }
+            );
+            console.log(res.data);
+            alert("Zamówienie złożone!");
+            clearCart();
+        } catch (err) {
+            console.error(err);
+            alert("Błąd podczas składania zamówienia");
+        }
+    };
 
-    
-    const createReturnReport = async(report)=>{
-        console.log("create pickup report")
-        return axios.post("http://localhost:8080/reports/return",report,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const getAllReports = async () => {
-        console.log("get all reports")
-        return axios.get("http://localhost:8080/reports",config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const getAllRepairs = async () =>{
-        console.log("get all repairs")
-        return axios.get("http://localhost:8080/repairs",config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const addRepair = async(newRepair) =>{
-        console.log("add Repair")
-        return axios.post("http://localhost:8080/repairs",newRepair,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const deleteRepair = async(id) =>{
-        console.log("add Repair")
-        return axios.delete("http://localhost:8080/repairs/"+id,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const updateRepair = async(repairData) =>{
-        console.log("add Repair")
-        return axios.put("http://localhost:8080/repairs/"+repairData.id,repairData,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const addLocation = async(locationData) =>{
-        console.log("add location")
-        return axios.post("http://localhost:8080/location",locationData,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-
-    }
-
-    const deleteLocation = async(id) =>{
-        return axios.delete("http://localhost:8080/location/"+id,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-        
-    }
-
-    const getAllLocations = async()=>{
-        return axios.get("http://localhost:8080/location/all",config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-    }
-
-    const updateLocation = async(id,data)=>{
-        return axios.patch("http://localhost:8080/location/"+id,data,config)
-        .then((res)=>{
-            console.log(res)
-            return res.data
-        })
-        .catch((err)=>{
-            alert(err)
-            return err
-        })
-
-    }
-
-    
-
+    const updateOrderStatus = async (orderId, newStatus) => {
+        try {
+            const res = await axios.patch(
+                `http://localhost:8080/order/updateStatus/${orderId}`,
+                null,
+                {
+                    params: { newStatus },
+                    headers: { Authorization: `Bearer ${Cookies.get("user_key")}` }
+                }
+            );
+            alert(`Status zamówienia zmieniony na ${newStatus}`);
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            alert("Nie udało się zmienić statusu zamówienia");
+            return null;
+        }
+    };
 
 
     return (
         <AuthContext.Provider value={{
             users,
-            reservations,
+            orders,
             notifications,
             login,
             logout,
@@ -591,42 +420,31 @@ export const AuthProvider = ({ children }) => {
             getAllUsers,
             updateUserRole,
             toggleBlockUser,
-            addReservation,
-            getReservationsByUserId,
-            acceptReservation,
+            addOrder,
+            getOrders,
             deleteUser,
-            removeReservation,
-            cancelReservation,
-            resignReservation,
-            getAllInsurances,
-            addInsurance,
-            updateInsurance,
-            getCamperById,
-            getAllCampers,
-            addCamper,
-            deleteCamper,
-            updateCamper,
+            getMosaicById,
+            getAllMosaics,
+            addMosaic,
+            refreshMosaics,
+            mosaics,
+            deleteMosaic,
+            updateMosaic,
+            getToolById,
+            getAllTools,
+            addTool,
+            deleteTool,
+            updateTool,
+            tools,
+            setTools,
             errorMessage,
-            addReservation,
-            removeReservation,
-            getReservations,
-            getVehicleReservations,
-            getAllPrices,
-            addPrice,
-            createPickupReport,
-            createReturnReport,
-            getAllReports,
-            getAllRepairs,
-            addRepair,
-            deleteRepair,
-            updateRepair,
-            addLocation,
-            deleteLocation,
-            getAllLocations,
-            updateLocation,
-            login,
-            logout,
-            register
+            currentUser,
+            cart,
+            addToCart,
+            deleteFromCart,
+            clearCart,
+            submitOrder,
+            updateOrderStatus,
         }}>
             {children}
         </AuthContext.Provider>

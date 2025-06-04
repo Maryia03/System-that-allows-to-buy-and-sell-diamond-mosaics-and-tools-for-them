@@ -8,15 +8,13 @@ const LogIn = ({ handleClose }) => {
     const { login, errorMessage } = useContext(AuthContext);
     const [refresh, setRefresh] = useState(true);
     const navigate = useNavigate();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // Efekt, który zamyka modal i przekierowuje na stronę główną po zalogowaniu
     useEffect(() => {
         if (Cookies.get("user_key")) {
-            handleClose();  // Zamknięcie modala po zalogowaniu
-            // Jeśli użytkownik jest administratorem, przekieruj do panelu admina
+            handleClose();
+            //Jeśli użytkownik jest administratorem, przekieruj do panelu admina
             if (Cookies.get('admin') == "1") {
                 navigate('/admin');  
             } else {
@@ -25,15 +23,13 @@ const LogIn = ({ handleClose }) => {
         }
     }, [ navigate, handleClose, refresh]);
 
-    // Funkcja do obsługi formularza logowania
     const handleSubmit = (e) => {
         e.preventDefault();
         setRefresh(!refresh)
         login(email, password)
-          // Próba logowania użytkownika
           if (Cookies.get("user_key") != "undefined") {
-            handleClose();  // Zamknięcie modala po zalogowaniu
-            navigate('/');  // Przekierowanie na stronę główną po zalogowaniu
+            handleClose();
+            navigate('/');
         }
     };
 

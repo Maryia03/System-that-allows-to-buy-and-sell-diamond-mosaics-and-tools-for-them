@@ -1,0 +1,129 @@
+.admin-mosaics-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.admin-mosaics-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.toggle-form-button {
+    display: block;
+    margin: 0 auto 1rem auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.toggle-form-button:hover {
+    background-color: #0056b3;
+}
+
+.admin-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-form input,
+.admin-form select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.admin-form button {
+    width: fit-content;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.admin-form button:hover {
+    background-color: #218838;
+}
+
+.mosaic-grid.admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.mosaic-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.mosaic-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.mosaic-card h4 {
+    font-size: 18px;
+    margin: 0.5rem 0;
+}
+
+.mosaic-card p {
+    font-size: 14px;
+    margin: 0.25rem 0;
+}
+
+.mosaic-card button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mosaic-card button:first-of-type {
+    background-color: #ffc107;
+    color: #000;
+    margin-right: 5px;
+}
+
+.mosaic-card button:first-of-type:hover {
+    background-color: #e0a800;
+}
+
+.mosaic-card button:last-of-type {
+    background-color: #dc3545;
+    color: white;
+}
+
+.mosaic-card button:last-of-type:hover {
+    background-color: #c82333;
+}
+
+.status-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 1rem;
+}

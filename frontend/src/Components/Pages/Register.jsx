@@ -2,12 +2,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
-import registerImage from './Image/kamper10.png';
 
 const Register = () => {
     const { register, currentUser, registrationMessage, setRegistrationMessage } = useContext(AuthContext);  
     const navigate = useNavigate();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -18,7 +16,7 @@ const Register = () => {
 
     useEffect(() => {
         if (currentUser) {
-            setRegistrationMessage(null); // Resetuj komunikat po udanej rejestracji
+            setRegistrationMessage(null);
             navigate('/');  
         }
     }, [currentUser, navigate, setRegistrationMessage]);
@@ -38,9 +36,6 @@ const Register = () => {
 
     return (
         <div className="register-container">
-            <div className="image-header">
-                <img src={registerImage} alt="Rejestracja" className="register-image" />
-            </div>
             <hr className="divider" />
             <h2>Rejestracja</h2>
             <div className="form-container">
