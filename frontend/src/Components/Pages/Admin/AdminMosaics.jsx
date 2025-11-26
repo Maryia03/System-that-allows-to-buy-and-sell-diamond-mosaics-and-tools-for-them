@@ -40,30 +40,76 @@ const AdminMosaics = () => {
     };
 
     const handleFileChange = (e) => {
-        setImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("The file must be an image!");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("The image is too large! The maximum size is 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+            if (img.width > 850 || img.height > 600) {
+                alert("The image is too big.The maximum size is 850x600.");
+                e.target.value = "";
+            } else {
+                setImageFile(file); // OK
+            }
+        };
+        img.src = URL.createObjectURL(file);
     };
 
     const handleEditFileChange = (e) => {
-        setEditImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("The file must be an image!");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("The image is too large! The maximum size is 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+            if (img.width > 850 || img.height > 600) {
+                alert("The image is too big.The maximum size is 850x600.");
+                e.target.value = "";
+            } else {
+                setEditImageFile(file);
+            }
+        };
+        img.src = URL.createObjectURL(file);
     };
 
     const handleAdd = async () => {
         const { name, description, size, price } = newMosaic;
         if (!name || !description || !size || !price || !imageFile) {
-            alert("Wszystkie pola są wymagane.");
+            alert("All fields are required.");
             return;
         }
-
         const formData = new FormData();
         formData.append('file', imageFile);
-
         const uploadRes = await fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData
         });
 
         if (!uploadRes.ok) {
-            alert('Błąd przesyłania obrazu.');
+            alert('Image transfer error.');
             return;
         }
 
@@ -77,7 +123,7 @@ const AdminMosaics = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Czy na pewno chcesz usunąć tę mozaikę?")) {
+        if (window.confirm("Are you sure you want to delete this mosaic?")) {
             await deleteMosaic(id);
             fetchMosaics();
         }
@@ -97,7 +143,7 @@ const AdminMosaics = () => {
     const saveEdit = async () => {
         const { id, name, description, size, price } = editingMosaic;
         if (!name || !description || !size || !price) {
-            alert("Wszystkie pola są wymagane.");
+            alert("All fields are required.");
             return;
         }
 
@@ -112,7 +158,7 @@ const AdminMosaics = () => {
             });
 
             if (!uploadRes.ok) {
-                alert('Błąd przesyłania nowego obrazu.');
+                alert('Error uploading new image.');
                 return;
             }
 
@@ -127,25 +173,25 @@ const AdminMosaics = () => {
 
     return (
         <div className="admin-mosaics-container">
-            <h2>Zarządzanie mozaikami</h2>
+            <h2>Mosaic management</h2>
             <button onClick={() => setShowForm(!showForm)} className="toggle-form-button">
-                {showForm ? 'Anuluj' : 'Dodaj nową mozaikę'}
+                {showForm ? 'Cancel' : 'Add a new mosaic'}
             </button>
 
             {showForm && (
                 <div className="admin-form">
-                    <input type="text" name="name" placeholder="Nazwa" value={newMosaic.name} onChange={handleChange} />
-                    <input type="text" name="description" placeholder="Opis" value={newMosaic.description} onChange={handleChange} />
+                    <input type="text" name="name" placeholder="Name" value={newMosaic.name} onChange={handleChange} />
+                    <input type="text" name="description" placeholder="Description" value={newMosaic.description} onChange={handleChange} />
                     <select name="size" value={newMosaic.size} onChange={handleChange}>
-                        <option value="">Wybierz rozmiar</option>
+                        <option value="">Select size</option>
                         <option value="40x40">40x40</option>
                         <option value="30x40">30x40</option>
                         <option value="20x30">20x30</option>
                     </select>
-                    <input type="number" name="price" placeholder="Cena" value={newMosaic.price} onChange={handleChange} />
+                    <input type="number" name="price" placeholder="Price" value={newMosaic.price} onChange={handleChange} />
                     <input type="file" accept="image/*" onChange={handleFileChange} />
-                    {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Podgląd" style={{ maxWidth: 200, marginTop: 10 }} />}
-                    <button onClick={handleAdd}>Dodaj</button>
+                    {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Preview" style={{ maxWidth: 200, marginTop: 10 }} />}
+                    <button onClick={handleAdd}>Add</button>
                 </div>
             )}
 
@@ -165,7 +211,7 @@ const AdminMosaics = () => {
 
             <Modal show={editModal} onHide={() => setEditModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edytuj mozaikę</Modal.Title>
+                    <Modal.Title>Edit mosaic</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {editingMosaic && (
@@ -180,11 +226,11 @@ const AdminMosaics = () => {
                             <input type="number" name="price" value={editingMosaic.price} onChange={handleEditChange} />
                             <input type="file" accept="image/*" onChange={handleEditFileChange} />
                             {editImageFile ? (
-                                <img src={URL.createObjectURL(editImageFile)} alt="Nowy podgląd" style={{ maxWidth: 200, marginTop: 10 }} />
+                                <img src={URL.createObjectURL(editImageFile)} alt="New preview" style={{ maxWidth: 200, marginTop: 10 }} />
                             ) : (
-                                editingMosaic.imageLink && <img src={editingMosaic.imageLink} alt="Podgląd" style={{ maxWidth: 200, marginTop: 10 }} />
+                                editingMosaic.imageLink && <img src={editingMosaic.imageLink} alt="Preview" style={{ maxWidth: 200, marginTop: 10 }} />
                             )}
-                            <button onClick={saveEdit}>Zapisz</button>
+                            <button onClick={saveEdit}>Save</button>
                         </div>
                     )}
                 </Modal.Body>

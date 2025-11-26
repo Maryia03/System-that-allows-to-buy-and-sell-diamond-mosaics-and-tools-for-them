@@ -22,8 +22,8 @@ public class FileUploadController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
-            summary = "Upload JPG image (max 800x650)",
-            description = "Accepts only JPG/JPEG files up to 5MB and max dimensions 800x650",
+            summary = "Upload JPG image (max 850x600)",
+            description = "Accepts only JPG/JPEG files up to 5MB and max dimensions 850x600",
             responses = {
                     @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
                     @ApiResponse(responseCode = "400", description = "Invalid file"),
@@ -32,7 +32,7 @@ public class FileUploadController {
     )
     public ResponseEntity<String> uploadImage(
             @Parameter(
-                    description = "JPG/JPEG image file (max 5MB, max 800x650)",
+                    description = "JPG/JPEG image file (max 5MB, max 850x600)",
                     required = true,
                     content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
                             schema = @Schema(type = "string", format = "binary"))
@@ -49,8 +49,8 @@ public class FileUploadController {
             if (image == null) {
                 return ResponseEntity.badRequest().body("Invalid image file.");
             }
-            if (image.getWidth() > 800 || image.getHeight() > 650) {
-                return ResponseEntity.badRequest().body("Image dimensions must not exceed 800x650 pixels.");
+            if (image.getWidth() > 850 || image.getHeight() > 600) {
+                return ResponseEntity.badRequest().body("Image dimensions must not exceed 850x600 pixels.");
             }
 
             Files.createDirectories(Paths.get(UPLOAD_DIR));

@@ -23,11 +23,11 @@ const AdminHeader = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
                     <Nav className="navbar-nav">
-                        <Nav.Link as={Link} to="/admin/users">Użytkownicy</Nav.Link>
+                        <Nav.Link as={Link} to="/admin/users">Users</Nav.Link>
                         <Nav.Link as={Link} to="/admin/mosaics">Mosaics</Nav.Link>
                         <Nav.Link as={Link} to="/admin/tools">Tools</Nav.Link>
                         <Nav.Link as={Link} to="/admin/orders">Orders</Nav.Link>
-                        <Nav.Link as={Link} to="/" onClick={handleLogout}>Wyloguj się</Nav.Link>
+                        <Nav.Link as={Link} to="/" onClick={handleLogout}>Log out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

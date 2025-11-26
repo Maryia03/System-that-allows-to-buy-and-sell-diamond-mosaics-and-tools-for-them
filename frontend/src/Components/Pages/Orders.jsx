@@ -3,13 +3,15 @@ import { AuthContext } from '../../Context/AuthContext';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './Orders.css';
+import { useNavigate } from "react-router-dom";
 
-const Orders= () => {
+
+const Orders = () => {
     const [orders, setOrders] = useState([]);
     const { currentUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Current user:", currentUser);
         if (!currentUser) return;
 
         const config = {
@@ -22,42 +24,58 @@ const Orders= () => {
     }, [currentUser]);
 
     if (!currentUser) {
-        return <h2 style={{ marginTop: '80px' }}>Musisz być zalogowany, aby zobaczyć zamówienia.</h2>;
+        return <h2 style={{ marginTop: '80px' }}>You must be logged in to view your orders.</h2>;
     }
 
     return (
         <div className="orders-page" style={{ marginTop: '80px' }}>
-            <h2>Moje Zamówienia</h2>
+            <h2>My Orders</h2>
             <hr />
             {orders.length === 0 ? (
-                <p>Brak zamówień.</p>
+                <p>No orders</p>
             ) : (
                 orders.map(order => (
                     <div className="order-card" key={order.id}>
                         <h4>Status: {order.orderStatus}</h4>
-                        <p>Łączny koszt: {order.totalCost} PLN</p>
+                        <p>Total cost: {order.totalCost} PLN</p>
 
-                        <div>
-                            <h5>Mosaics:</h5>
-                            {Array.isArray(order.mosaics) && order.mosaics.length > 0 ? (
-                                order.mosaics.map(mosaic => (
-                                    <div key={mosaic.id}>
-                                        <p>{mosaic.title} - {mosaic.price} PLN</p>
-                                    </div>
-                                ))
-                            ) : <p>Brak mozaik.</p>}
-                        </div>
+                        {order.mosaics && order.mosaics.length > 0 && (
+                            <div className="order-section">
+                                <h5>Mosaics:</h5>
+                                <div className="order-items-grid">
+                                    {order.mosaics.map(mosaic => (
+                                        <div className="order-item clickable" key={mosaic.id}
+                                             onClick={() => navigate(`/mosaics/${mosaic.id}`, { state: { mosaic } })}
+                                        >
+                                            <img src={mosaic.imageLink} alt={mosaic.name} className="order-thumb"/>
+                                            <div>
+                                                <p><strong>{mosaic.name}</strong></p>
+                                                <p>{mosaic.price} PLN</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
-                        <div>
-                            <h5>Tools:</h5>
-                            {Array.isArray(order.tools) && order.tools.length > 0 ? (
-                                order.tools.map(tool => (
-                                    <div key={tool.id}>
-                                        <p>{tool.name} - {tool.price} PLN</p>
-                                    </div>
-                                ))
-                            ) : <p>Brak narzędzi.</p>}
-                        </div>
+                        {order.tools && order.tools.length > 0 && (
+                            <div className="order-section">
+                                <h5>Tools:</h5>
+                                <div className="order-items-grid">
+                                    {order.tools.map(tool => (
+                                        <div className="order-item clickable" key={tool.id}
+                                             onClick={() => navigate(`/tools/${tool.id}`, { state: { tool } })}
+                                        >
+                                            <img src={tool.imageLink} alt={tool.name} className="order-thumb"/>
+                                            <div>
+                                                <p><strong>{tool.name}</strong></p>
+                                                <p>{tool.price} PLN</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ))
             )}

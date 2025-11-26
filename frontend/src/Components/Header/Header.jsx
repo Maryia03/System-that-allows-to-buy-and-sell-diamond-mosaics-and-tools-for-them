@@ -32,31 +32,31 @@ const Header = () => {
                         <Nav.Link as={Link} to="/">Mosaics</Nav.Link>
                         <Nav.Link as={Link} to="/tool">Tools</Nav.Link>
                         <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
-                        <Nav.Link as={Link} to="/orders">Moje Zamówienia</Nav.Link>
+                        <Nav.Link as={Link} to="/orders">My Orders</Nav.Link>
                         {!Cookies.get('user_id') ? (
                             <>
-                                <Nav.Link onClick={handleLoginModalShow}>Logowanie</Nav.Link>
-                                <Nav.Link as={Link} to="/register">Rejestracja</Nav.Link>
+                                <Nav.Link onClick={handleLoginModalShow}>Login</Nav.Link>
+                                <Nav.Link as={Link} to="/register">Registration</Nav.Link>
                             </>
                         ) : (
                             <>
 
-                                {/* Link do panelu administracyjnego, jeśli użytkownik jest administratorem */}
+                                {/* Link to the administration panel if the user is an administrator */}
                                 {Cookies.get('admin') == "1" && (
-                                    <Nav.Link as={Link} to="/admin">Panel Administratora</Nav.Link>
+                                    <Nav.Link as={Link} to="/admin">Administrator Panel</Nav.Link>
                                 )}
 
-                                <Nav.Link as={Link} to="/" onClick={handleLogout}>Wyloguj się</Nav.Link>
+                                <Nav.Link as={Link} to="/" onClick={handleLogout}>Log out</Nav.Link>
                             </>
                         )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
 
-            {/* Modal logowania */}
+            {/* Login modal */}
             <Modal show={showLoginModal} onHide={handleLoginModalClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Logowanie</Modal.Title>
+                    <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <LogIn handleClose={handleLoginModalClose} />

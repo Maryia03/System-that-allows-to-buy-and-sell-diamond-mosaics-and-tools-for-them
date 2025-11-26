@@ -8,7 +8,7 @@ import AdminTools from "./AdminTools";
 const AdminPage = () => {
     return (
         <div>
-            <h1>Panel Administratora</h1>
+            <h1>Administrator Panel</h1>
             <Routes>
                 <Route path="/" element={<AdminMosaics />} />
                 <Route path="orders" element={<AdminOrders />} />

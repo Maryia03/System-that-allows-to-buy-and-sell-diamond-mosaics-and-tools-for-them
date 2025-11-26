@@ -18,15 +18,14 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Authorization': `Bearer ${Cookies.get("user_key")}` }
     };
 
-    //Pobieranie danych z localStorage przy uruchomieniu
+    //Retrieving data from localStorage on startup
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem('currentUser'));
         if (storedUser) {
             setCurrentUser(storedUser);
         }
 
-
-        //Pobieramy użytkowników z localStorage
+        //Retrieve users from localStorage
         const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
         const updatedUsers = storedUsers.map(user => {
             if (!user.registeredAt) {
@@ -50,12 +49,11 @@ export const AuthProvider = ({ children }) => {
         }
 
 
-        //Ładujemy koszyk
+        //Loading basket
         const storedCart = JSON.parse(localStorage.getItem('cart'));
         if (storedCart && Array.isArray(storedCart)) {
             setCart(storedCart);
         }
-
         getAllMosaics();
         getAllTools();
     }, []);
@@ -65,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
-    //Funkcja do logowania użytkownika
+    //User login function
     const login = (user, password) => {
         var data = { email: user, password: password }
         // console.log("login: " + JSON.stringify(data))
@@ -88,7 +86,6 @@ export const AuthProvider = ({ children }) => {
                     setCurrentUser(res.data);
                     localStorage.setItem('currentUser', JSON.stringify(res.data));
                 }
-
                 setErrorMessage('');
                 window.location.reload();
             })
@@ -97,9 +94,6 @@ export const AuthProvider = ({ children }) => {
                 setErrorMessage("Nieprawidłowe dane logowania");
                 return false;
             });
-
-
-
 
         // document.cookie = 'user_key=' + user + ";";
         // setCurrentUser(user);

@@ -90,3 +90,12 @@
         max-width: 100%;
     }
 }
+
+.clickable {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.clickable:hover {
+    background-color: #f1f1f1;
+}

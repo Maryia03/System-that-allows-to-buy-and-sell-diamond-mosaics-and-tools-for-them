@@ -25,7 +25,7 @@ const MosaicDetails = () => {
     }, [id, mosaics, mosaicFromState]);
 
     if (!mosaic) {
-        return <p>Nie znaleziono mozaiki. Proszę wrócić do listy.</p>;
+        return <p>No mosaic found. Please return to the list.</p>;
     }
 
     const handleAddToCart = () => {
@@ -43,7 +43,7 @@ const MosaicDetails = () => {
             type: 'mosaic'
         });
 
-        setStatus('Dodano do koszyka!');
+        setStatus('Added to cart!');
         setTimeout(() => setStatus(''), 3000);
     };
 
@@ -51,7 +51,7 @@ const MosaicDetails = () => {
         <div className="mosaic-details">
             <Modal show={showLoginModal} onHide={() => setShowLoginModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Logowanie</Modal.Title>
+                    <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <LogIn handleClose={() => setShowLoginModal(false)}/>
@@ -62,14 +62,14 @@ const MosaicDetails = () => {
                 <img src={mosaic.imageLink} alt={mosaic.name} className="mosaic-main-image"/>
                 <div className="mosaic-info">
                     <h2>{mosaic.name}</h2>
-                    <p><strong>Rozmiar:</strong> {mosaic.size}</p>
-                    <p><strong>Cena:</strong> {mosaic.price} PLN</p>
-                    <p><strong>Opis:</strong> {mosaic.description}</p>
+                    <p><strong>Size:</strong> {mosaic.size}</p>
+                    <p><strong>Price:</strong> {mosaic.price} PLN</p>
+                    <p><strong>Description:</strong> {mosaic.description}</p>
                 </div>
             </div>
 
             <button type="button" onClick={handleAddToCart} className="add-to-cart-button">
-                Dodaj do koszyka
+                Add to cart
             </button>
 
             {status && <p className="status-message">{status}</p>}

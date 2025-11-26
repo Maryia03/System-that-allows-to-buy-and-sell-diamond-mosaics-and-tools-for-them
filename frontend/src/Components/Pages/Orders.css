@@ -36,3 +36,46 @@
 .order-card div > div {
   margin-left: 15px;
 }
+
+.order-section {
+  margin-top: 15px;
+}
+
+.order-items-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: 0.2s;
+}
+
+.order-item:hover {
+  background: #f0f0f0;
+}
+
+.order-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: #eaeaea;
+}
+

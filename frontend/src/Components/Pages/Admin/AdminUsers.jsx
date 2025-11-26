@@ -31,7 +31,7 @@ const AdminUsers = () => {
 
     return (
         <div className="admin-users-container">
-            <h1>Użytkownicy</h1>
+            <h1>Users</h1>
             <Table striped bordered responsive className="users-table">
                 <thead>
                     <tr>
@@ -48,7 +48,7 @@ const AdminUsers = () => {
                             <td>{user.id}</td>
                             <td>{user.name}</td>
                             <td>{user.email}</td>
-                            <td>{user.acive ? 'Aktywny' : 'Zablokowany'}</td>
+                            <td>{user.acive ? 'Active' : 'Blocked'}</td>
                             <td>
                                 <Button 
                                     variant="danger" 
@@ -62,7 +62,7 @@ const AdminUsers = () => {
                                     onClick={() => handleBlockToggle(user.id, user.isBlocked)}
                                     className="action-button"
                                 >
-                                    {user.isBlocked ? 'Odblokuj' : 'Zablokuj'}
+                                    {user.isBlocked ? 'Unlock' : 'Block'}
                                 </Button>
                             </td>
                         </tr>

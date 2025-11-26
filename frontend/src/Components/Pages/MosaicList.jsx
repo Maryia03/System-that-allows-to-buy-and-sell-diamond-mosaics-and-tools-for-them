@@ -7,6 +7,7 @@ const MosaicList = () => {
     const { mosaics } = useContext(AuthContext);
     const [filtered, setFiltered] = useState([]);
     const [sort, setSort] = useState('default');
+    const [searchTerm, setSearchTerm] = useState('');
     const [sizeFilter, setSizeFilter] = useState('');
     const navigate = useNavigate();
 
@@ -17,6 +18,12 @@ const MosaicList = () => {
             result = result.filter(m => m.size === sizeFilter);
         }
 
+        if (searchTerm) {
+            result = result.filter(m =>
+                m.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         if (sort === 'asc') {
             result.sort((a, b) => a.price - b.price);
         } else if (sort === 'desc') {
@@ -24,19 +31,26 @@ const MosaicList = () => {
         }
 
         setFiltered(result);
-    }, [mosaics, sort, sizeFilter]);
+    }, [mosaics, sort, sizeFilter, searchTerm]);
 
     return (
         <div className="mosaic-list-container">
             <div className="list-filters">
+                <input
+                    type="text"
+                    placeholder="Search mosaic"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+
                 <select onChange={(e) => setSort(e.target.value)} value={sort}>
-                    <option value="default">Sortuj</option>
-                    <option value="asc">Cena: od najniższej</option>
-                    <option value="desc">Cena: od najwyższej</option>
+                    <option value="default">Sort</option>
+                    <option value="asc">Price: from lowest</option>
+                    <option value="desc">Price: from highest</option>
                 </select>
 
                 <select onChange={(e) => setSizeFilter(e.target.value)} value={sizeFilter}>
-                    <option value="">Rozmiar</option>
+                    <option value="">Size</option>
                     <option value="40x40">40x40</option>
                     <option value="30x40">30x40</option>
                     <option value="20x30">20x30</option>

@@ -25,7 +25,7 @@ const Register = () => {
         e.preventDefault();
         
         if (!email || !password || !firstName || !lastName || !phoneNumber || !address) {
-            setError('Proszę wypełnić wszystkie pola.');
+            setError('Please fill in all fields.');
             return;
         }
 
@@ -37,12 +37,11 @@ const Register = () => {
     return (
         <div className="register-container">
             <hr className="divider" />
-            <h2>Rejestracja</h2>
+            <h2>Registration</h2>
             <div className="form-container">
                 <form onSubmit={handleSubmit}>
-                    {/* Pola formularza */}
                     <div className="form-group">
-                        <label htmlFor="firstName">Imię:</label>
+                        <label htmlFor="firstName">First Name:</label>
                         <input
                             type="text"
                             id="firstName"
@@ -53,7 +52,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="lastName">Nazwisko:</label>
+                        <label htmlFor="lastName">Last Name:</label>
                         <input
                             type="text"
                             id="lastName"
@@ -64,7 +63,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="phoneNumber">Numer telefonu:</label>
+                        <label htmlFor="phoneNumber">Phone number:</label>
                         <input
                             type="text"
                             id="phoneNumber"
@@ -75,7 +74,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="address">Adres zamieszkania:</label>
+                        <label htmlFor="address">Residential address:</label>
                         <input
                             type="text"
                             id="address"
@@ -97,7 +96,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Hasło:</label>
+                        <label htmlFor="password">Password:</label>
                         <input
                             type="password"
                             id="password"
@@ -107,7 +106,7 @@ const Register = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">Zarejestruj się</button>
+                    <button type="submit" className="btn btn-primary">Sign up</button>
                 </form>
 
                 {error && <div className="error-message">{error}</div>}

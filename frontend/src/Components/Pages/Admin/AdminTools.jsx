@@ -39,17 +39,65 @@ const AdminTools = () => {
     };
 
     const handleFileChange = (e) => {
-        setImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("The file must be an image!");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("The image is too large! The maximum size is 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+            if (img.width > 850 || img.height > 600) {
+                alert("The image is too big.The maximum size is 850x600.");
+                e.target.value = "";
+            } else {
+                setImageFile(file);
+            }
+        };
+        img.src = URL.createObjectURL(file);
     };
 
     const handleEditFileChange = (e) => {
-        setEditImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("The file must be an image!");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("The image is too large! The maximum size is 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+            if (img.width > 850 || img.height > 600) {
+                alert("The image is too big.The maximum size is 850x600.");
+                e.target.value = "";
+            } else {
+                setEditImageFile(file);
+            }
+        };
+        img.src = URL.createObjectURL(file);
     };
 
     const handleAdd = async () => {
         const { name, description, price } = newTool;
         if (!name || !description || !price || !imageFile) {
-            alert("Wszystkie pola są wymagane.");
+            alert("All fields are required.");
             return;
         }
 
@@ -62,7 +110,7 @@ const AdminTools = () => {
         });
 
         if (!uploadRes.ok) {
-            alert('Błąd przesyłania obrazu.');
+            alert('Image transfer error.');
             return;
         }
 
@@ -76,7 +124,7 @@ const AdminTools = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Czy na pewno chcesz usunąć to narzędzie?")) {
+        if (window.confirm("Are you sure you want to remove this tool?")) {
             await deleteTool(id);
             fetchTools();
         }
@@ -96,7 +144,7 @@ const AdminTools = () => {
     const saveEdit = async () => {
         const { id, name, description, price } = editingTool;
         if (!name || !description || !price) {
-            alert("Wszystkie pola są wymagane.");
+            alert("All fields are required.");
             return;
         }
 
@@ -111,7 +159,7 @@ const AdminTools = () => {
             });
 
             if (!uploadRes.ok) {
-                alert('Błąd przesyłania nowego obrazu.');
+                alert('Error uploading new image.');
                 return;
             }
 
@@ -126,19 +174,19 @@ const AdminTools = () => {
 
     return (
         <div className="admin-tools-container">
-            <h2>Zarządzanie narzędziami</h2>
+            <h2>Tool management</h2>
 
             <button onClick={() => setShowForm(!showForm)} className="toggle-form-button">
-                {showForm ? 'Anuluj' : 'Dodaj nowe narzędzie'}
+                {showForm ? 'Cancel' : 'Add a new tool'}
             </button>
 
             {showForm && (
                 <div className="admin-form">
-                    <input type="text" name="name" placeholder="Nazwa" value={newTool.name} onChange={handleChange} />
-                    <input type="text" name="description" placeholder="Opis" value={newTool.description} onChange={handleChange} />
-                    <input type="number" name="price" placeholder="Cena" value={newTool.price} onChange={handleChange} />
+                    <input type="text" name="name" placeholder="Name" value={newTool.name} onChange={handleChange} />
+                    <input type="text" name="description" placeholder="Description" value={newTool.description} onChange={handleChange} />
+                    <input type="number" name="price" placeholder="Price" value={newTool.price} onChange={handleChange} />
                     <input type="file" accept="image/*" onChange={handleFileChange} />
-                    {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Podgląd" style={{ maxWidth: 200, marginTop: 10 }} />}
+                    {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Preview" style={{ maxWidth: 200, marginTop: 10 }} />}
                     <button onClick={handleAdd}>Dodaj</button>
                 </div>
             )}
@@ -150,15 +198,15 @@ const AdminTools = () => {
                         <h4>{tool.name}</h4>
                         <p>{tool.price} PLN</p>
                         <p>{tool.description}</p>
-                        <button onClick={() => openEditModal(tool)}>Edytuj</button>
-                        <button onClick={() => handleDelete(tool.id)}>Usuń</button>
+                        <button onClick={() => openEditModal(tool)}>Edit</button>
+                        <button onClick={() => handleDelete(tool.id)}>Delete</button>
                     </div>
                 ))}
             </div>
 
             <Modal show={editModal} onHide={() => setEditModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edytuj narzędzie</Modal.Title>
+                    <Modal.Title>Edit tool</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {editingTool && (
@@ -168,11 +216,11 @@ const AdminTools = () => {
                             <input type="number" name="price" value={editingTool.price} onChange={handleEditChange} />
                             <input type="file" accept="image/*" onChange={handleEditFileChange} />
                             {editImageFile ? (
-                                <img src={URL.createObjectURL(editImageFile)} alt="Nowy podgląd" style={{ maxWidth: 200, marginTop: 10 }} />
+                                <img src={URL.createObjectURL(editImageFile)} alt="New preview" style={{ maxWidth: 200, marginTop: 10 }} />
                             ) : (
-                                editingTool.imageLink && <img src={editingTool.imageLink} alt="Podgląd" style={{ maxWidth: 200, marginTop: 10 }} />
+                                editingTool.imageLink && <img src={editingTool.imageLink} alt="Preview" style={{ maxWidth: 200, marginTop: 10 }} />
                             )}
-                            <button onClick={saveEdit}>Zapisz</button>
+                            <button onClick={saveEdit}>Save</button>
                         </div>
                     )}
                 </Modal.Body>

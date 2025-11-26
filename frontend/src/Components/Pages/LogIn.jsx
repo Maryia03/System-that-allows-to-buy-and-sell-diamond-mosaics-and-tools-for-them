@@ -14,11 +14,11 @@ const LogIn = ({ handleClose }) => {
     useEffect(() => {
         if (Cookies.get("user_key")) {
             handleClose();
-            //Jeśli użytkownik jest administratorem, przekieruj do panelu admina
+            //If the user is an administrator, redirect to the admin panel
             if (Cookies.get('admin') == "1") {
                 navigate('/admin');  
             } else {
-                navigate('/');  // Inaczej przekierowanie na stronę główną
+                navigate('/'); //Otherwise, redirect to the home page
             }
         }
     }, [ navigate, handleClose, refresh]);
@@ -36,7 +36,7 @@ const LogIn = ({ handleClose }) => {
     return (
         <div className="login-container">
             <hr className="divider" />
-            <h2>Logowanie</h2>
+            <h2>Login</h2>
             <div className="form-container">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -61,7 +61,7 @@ const LogIn = ({ handleClose }) => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">Zaloguj się</button>
+                    <button type="submit" className="btn btn-primary">Log in</button>
                 </form>
 
                 {errorMessage && <div className="error-message">{errorMessage}</div>}

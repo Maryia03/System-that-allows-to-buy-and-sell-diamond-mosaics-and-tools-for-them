@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavig
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './Components/Header/Header';
-import AdminHeader from './Components/Header/AdminHeader'; // Nagłówek dla administratora
+import AdminHeader from './Components/Header/AdminHeader';
 import Footer from './Components/Footer/Footer';
 import LogIn from './Components/Pages/LogIn';
 import Register from './Components/Pages/Register';

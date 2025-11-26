@@ -25,7 +25,7 @@ const ToolDetails = () => {
     }, [id, tools, toolFromState]);
 
     if (!tool) {
-        return <p>Nie znaleziono narzędzia. Proszę wrócić do listy.</p>;
+        return <p>No tool found. Please return to the list.</p>;
     }
 
     const handleAddToCart = () => {
@@ -42,7 +42,7 @@ const ToolDetails = () => {
             type: 'tool'
         });
 
-        setStatus('Dodano do koszyka!');
+        setStatus('Added to cart!');
         setTimeout(() => setStatus(''), 3000);
     };
 
@@ -50,7 +50,7 @@ const ToolDetails = () => {
         <div className="tool-details">
             <Modal show={showLoginModal} onHide={() => setShowLoginModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Logowanie</Modal.Title>
+                    <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <LogIn handleClose={() => setShowLoginModal(false)}/>
@@ -61,12 +61,12 @@ const ToolDetails = () => {
                 <img src={tool.imageLink} alt={tool.name} className="tool-main-image"/>
                 <div className="tool-info">
                     <h2>{tool.name}</h2>
-                    <p><strong>Cena:</strong> {tool.price} PLN</p>
-                    <p><strong>Opis:</strong> {tool.description}</p>
+                    <p><strong>Price:</strong> {tool.price} PLN</p>
+                    <p><strong>Description:</strong> {tool.description}</p>
                 </div>
             </div>
                 <button type="button" onClick={handleAddToCart} className="add-to-cart-button">
-                    Dodaj do koszyka
+                    Add to cart
                 </button>
                     {status && <p className="status-message">{status}</p>}
             </div>

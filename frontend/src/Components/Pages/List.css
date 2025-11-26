@@ -14,6 +14,14 @@
     margin-bottom: 30px;
 }
 
+.list-filters input[type="text"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
 .list-filters select {
     padding: 8px 12px;
     border: 1px solid #ccc;

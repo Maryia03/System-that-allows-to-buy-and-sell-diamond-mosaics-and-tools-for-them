@@ -4,18 +4,15 @@ import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './Cart.css';
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const { cart, deleteFromCart, currentUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     if (!currentUser) {
-        return (
-            <div className="cart-container" style={{ marginTop: '80px' }}>
-                <h2>Musisz być zalogowany, aby korzystać z koszyka.</h2>
-            </div>
-        );
+        return <h2 style={{ marginTop: '80px' }}>You must be logged in to view your orders.</h2>;
     }
-
 
     const handleRemove = (itemId) => {
         deleteFromCart(itemId);
@@ -24,10 +21,12 @@ const Cart = () => {
     if (!cart || cart.length === 0) {
         return (
             <div className="cart-container" style={{ marginTop: '80px' }}>
-                <h2>Twój koszyk jest pusty</h2>
+                <h2>Your cart is empty</h2>
             </div>
         );
     }
+
+
 
     const handleCheckout = async () => {
         if (!currentUser) return;
@@ -51,25 +50,35 @@ const Cart = () => {
             const response = await axios.post('http://localhost:8080/orders/addOrder', params, config);
             alert(response.data);
 
-            // Очистка корзины
             cart.forEach(item => deleteFromCart(item.id));
 
         } catch (err) {
-            console.error('Błąd podczas składania zamówienia:', err);
-            alert('Nie udało się złożyć zamówienia.');
+            console.error('Error while placing an order:', err);
+            alert('The order could not be placed.');
         }
     };
 
     return (
         <div className="cart-container" style={{ marginTop: '80px' }}>
             <div className="cart-header">
-                <h2>Mój Koszyk</h2>
-                <p>Przeglądaj produkty dodane do koszyka.</p>
+                <h2>My Cart</h2>
+                <p>View the items you have added to your cart.</p>
                 <hr className="divider" />
             </div>
 
             {cart.map((item) => (
-                <div key={item.id} className="cart-item-card">
+                <div
+                    key={item.id}
+                    className="cart-item-card clickable"
+                    onClick={() =>
+                        navigate(
+                            item.type === 'mosaic'
+                                ? `/mosaics/${item.id}`
+                                : `/tools/${item.id}`,
+                            { state: { item } }
+                        )
+                    }
+                >
                     <div className="cart-item-details">
                         <h3>{item.title}</h3>
                         <img
@@ -77,23 +86,26 @@ const Cart = () => {
                             alt={item.title}
                             className="cart-item-image"
                         />
-                        <p><strong>Rozmiar:</strong> {item.size}</p>
-                        <p><strong>Cena:</strong> {item.price} PLN</p>
+                        {item.size && <p><strong>Size:</strong> {item.size}</p>}
+                        <p><strong>Price:</strong> {item.price} PLN</p>
 
                         <Button
-                            onClick={() => handleRemove(item.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemove(item.id);
+                            }}
                             className="btn btn-danger"
                         >
-                            Usuń z koszyka
+                            Remove from cart
                         </Button>
                     </div>
                 </div>
             ))}
 
             <div className="cart-summary">
-                <h4>Łączna kwota: {cart.reduce((sum, item) => sum + item.price, 0)} PLN</h4>
+                <h4>Total amount: {cart.reduce((sum, item) => sum + item.price, 0)} PLN</h4>
                 <Button className="btn btn-success" onClick={handleCheckout}>
-                    Przejdź do płatności
+                    Proceed to payment
                 </Button>
             </div>
         </div>

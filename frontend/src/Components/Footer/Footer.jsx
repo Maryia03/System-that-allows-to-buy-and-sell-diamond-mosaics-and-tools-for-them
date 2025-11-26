@@ -12,8 +12,8 @@ const Footer = () => {
             <div className="separator"></div>
 
             <div className="column">
-                <h2>Oddział Warszawa</h2>
-                <p>ul. Krakowska 36A</p>
+                <h2>Warsaw Office</h2>
+                <p>36A Krakowska Street</p>
             </div>
         </div>
     );

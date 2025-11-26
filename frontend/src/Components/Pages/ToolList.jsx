@@ -6,11 +6,18 @@ import { AuthContext } from '../../Context/AuthContext';
 const ToolList = () => {
     const { tools } = useContext(AuthContext);
     const [filtered, setFiltered] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [sort, setSort] = useState('default');
     const navigate = useNavigate();
 
     useEffect(() => {
         let result = [...tools];
+
+        if (searchTerm) {
+            result = result.filter(t =>
+                t.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
 
         if (sort === 'asc') {
             result.sort((a, b) => a.price - b.price);
@@ -19,15 +26,22 @@ const ToolList = () => {
         }
 
         setFiltered(result);
-    }, [tools, sort]);
+    }, [tools, sort, searchTerm]);
 
     return (
         <div className="tool-list-container">
             <div className="list-filters">
+                <input
+                    type="text"
+                    placeholder="Search for a tool"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+
                 <select onChange={(e) => setSort(e.target.value)} value={sort}>
-                    <option value="default">Sortuj</option>
-                    <option value="asc">Cena: od najniższej</option>
-                    <option value="desc">Cena: od najwyższej</option>
+                    <option value="default">Sort</option>
+                    <option value="asc">Price: from lowest</option>
+                    <option value="desc">Price: from highest</option>
                 </select>
             </div>
 
