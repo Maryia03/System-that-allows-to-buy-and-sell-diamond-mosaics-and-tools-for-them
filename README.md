@@ -1,1 +1,1 @@
-# System sprzedaży i kupna mozaik diamentowych i ich narzędzi(System of selling and buying diamond mosaics and their tools)
+# System that allows to buy and sell diamond mosaics and tools for them
